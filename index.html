@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>API Fun!</title>
+    <style>
+        p {
+            font-size: 20px;
+        }
+        body {
+            background-color: #E6DBFF;
+        }
+		h2 {
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Random Programming Jokes!</h1>
+    <p>Generate Joke <button onclick="callJoke()">Generate</button></p>
+	<h2>Joke:</h2>
+    <p id="setup"></p>
+	<p id="delivery"></p>
+	<h2>About this API:</h2>
+	<p>This API generates random jokes that can
+	be filtered in certain ways. </p>
+	<p>This API can be found <a href="https://sv443.net/jokeapi" target="_blank">here</a></p>
+	<p>My site uses a GET request that sends only jokes about programming that
+		do not involve nfsw, religious, or political jokes. <br> (I've filtered
+		as much as I can but some jokes may still be offending).
+	<p>This application would be useful for keeping a company's website lighthearted <br>
+		by displaying a joke everytime an employee logs in.</p>
+	<p>It could also be useful for aspiring comedians to study a large <br>
+			amount of random jokes or use them as practice material</p>
+
+    <script language="javascript">
+        function callJoke() {
+            var obj = new XMLHttpRequest();
+            obj.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+	                var joke = this.responseText;
+					joke = JSON.parse(joke);
+					if (joke.type == "twopart") {
+						var setup = joke.setup;
+						var delivery = joke.delivery;
+						document.getElementById("setup").innerHTML = setup;
+					   	document.getElementById("delivery").innerHTML = delivery;
+					} else {
+						document.getElementById("setup").innerHTML = joke.joke;
+						document.getElementById("delivery").innerHTML = "";
+					}
+	            }
+			}
+            obj.open("GET", "https://sv443.net/jokeapi/category/programming?blacklistFlags=nsfwreligiouspolitical", true);
+            obj.send();
+        }
+
+    </script>
+</body>
+</html>
